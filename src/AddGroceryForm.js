@@ -18,19 +18,23 @@ class AddGroceryForm extends Component {
 
   addGrocery(event) {
     event.preventDefault();
+    const { updateGroceryList } = this.props;
+    const grocery = this.state;
 
     fetch('/api/v1/groceries', {
       method: 'POST',
-      body: JSON.stringify({ grocery: this.state }),
+      body: JSON.stringify({ grocery }),
       headers: {
         'Content-Type': 'application/json'
       }
     })
-    .then(() => {
+    .then(response => response.json())
+    .then(groceries => {
+      console.log("THIS: ", this);
       this.setState({
         name: '',
         quantity: ''
-      });
+      }, updateGroceryList(groceries));
     })
     .catch(error => console.log(error));
   }
